@@ -5,5 +5,3 @@
 - erste gebrauchsfähige Softwareversion 
 - Fahrzeugsteuerung funktionsfähig
 - Konfiguration über Sourcecode
-
-
