@@ -2,11 +2,13 @@
 
 Heiko Deserno, 2022, [FB22](https://feldbahn22.de)
 
+FB22-Artikel zum Projekt: https://fb22.de/123
+
 `Microrail` ist eine Software zur drahtlosen Steuerung von Modellfahrzeugen. Zum System gehören neben dem hier beschriebenen Empfänger ein Sender (Handregler). Der Sender als Bediengerät mit Drehregler und Display ist ein separates Softwareprojekt (derzeit noch nicht vorhanden).
 
 ### Warum gibt es Microrail?
 
-Da die wunderbaren [Deltang](http://www.deltang.co.uk/)-Empfänger *Rx6* nicht mehr hergestellt werden und kaum noch lieferbar sind, habe ich nach einer geeigneten Alternative zur drahtlosen Steuerung von Modellbahn-Fahrzeugen (insbesondere Feldbahnen im Maßstab 1:13) gesucht. [Locoremote](http://www.locoremote.co.uk/) ist auf den ersten Blick eine brauchbare Alternative. Den für mich größten Makel wollte ich jedoch nicht hinnehmen: Eine Modellfahrzeug sollte nicht mit einem Handy gesteuert werden. Hier gehört ein richtiger Handregler mit Tasten und und einem Drehregler her. Da *Locoremote* diese Funktion nicht unterstützt, kam die Idee einer eigenen Software. Die Idee zur dieser Software stammt urspünglich von [Olle Sköld](http://depronized.com/), der eine solche Steuerung erstmalig für seine [Hectorrail](https://www.thingiverse.com/thing:2575667)-Lokomotive vorstellte. `Microrail` nutzt eine andere Hardware-Plattform sowie ein modifiziertes Bedienkonzept. Auch die Idee des Handsenders stammt von ihm. Auf [Thingiverse](https://www.thingiverse.com/thing:3252986) stellte er einen Prototypen vor, der eher als Idee statt einer fertigen Lösung zu verstehen ist. 
+Da die wunderbaren [Deltang](http://www.deltang.co.uk/)-Empfänger *Rx6* nicht mehr hergestellt werden und kaum noch lieferbar sind, habe ich nach einer geeigneten Alternative zur drahtlosen Steuerung von Modellbahn-Fahrzeugen (insbesondere Feldbahnen im Maßstab 1:13) gesucht. [Locoremote](http://www.locoremote.co.uk/) ist auf den ersten Blick eine brauchbare Alternative. Den für mich größten Makel wollte ich jedoch nicht hinnehmen: Eine Modellfahrzeug sollte nicht mit einem Handy gesteuert werden. Hier gehört ein richtiger Handregler mit Tasten und einem Drehregler her. Da *Locoremote* diese Funktion nicht unterstützt, kam die Idee einer eigenen Software. Die Idee zur dieser Software stammt urspünglich von [Olle Sköld](http://depronized.com/), der eine solche Steuerung für seine [Hectorrail](https://www.thingiverse.com/thing:2575667)-Lokomotive vorstellte. `Microrail` nutzt eine andere Hardware-Plattform sowie ein modifiziertes Bedienkonzept. Auch die Idee des Handsenders stammt von ihm. Auf [Thingiverse](https://www.thingiverse.com/thing:3252986) stellte er einen Prototypen vor, der eher als Idee statt einer fertigen Lösung zu verstehen ist. 
 
 ## Microrail-Receiver
 
@@ -22,25 +24,24 @@ Als Microcontroller wird ein [Lolin D1 mini](https://www.wemos.cc/en/latest/d1/d
 
 Alle diese Platinen werden über den *I2C*-Bus mit dem *D1 mini* verbunden. Die Software-Steuerung basiert auf der [Lolin-Treiberlib](https://github.com/wemos/LOLIN_I2C_MOTOR_Library).
 
-Die Platinen mit den *HR8833* und *AT8870* Chipsätzen sind seit 2022 neu und haben 
-verschiedene Einsatzzwecke:
+Die Platinen mit den *HR8833* und *AT8870* Chipsätzen sind seit 2022 neu und haben verschiedene Einsatzzwecke:
 
 - *HR8833*: 3 bis 10 V, 1,5 A Motorstrom
 - *AT8870*: 6,5 bis 38 V, 2 A Motorstrom
 
-### Schalplan
+### Schaltplan
 
 #### Schaltung mit 1S-Akku (Eine Zelle)
 
 ![Schaltplan 1S Akku](/images/schaltplan1.png)
 
-Die Schaltung zeigt die Variante mit einem einzelligen LiPo/LiIo-Akku. Die Versorgungsspannung beträgt 3,7 - 4,2 V und liegt damit unter der Grenze von 5 V für den *D1 mini*. Am Ausgang *D6* ist eine Status-LED angeschlossen, die nach erfolgreicher Initilisierung leuchtet. Der 100k Widerstand liegt am analogen Eingang an und dient zur Messung der Versorgungsspannung. Als Motor wird eine 3V Getriebemotor verwendet.
+Die Schaltung zeigt die Variante mit einem einzelligen LiPo/LiIo-Akku. Die Versorgungsspannung beträgt 3,7 - 4,2 V und liegt damit unter der Grenze von 5 V für den *D1 mini*. Am Ausgang *D6* ist eine Status-LED angeschlossen, die nach erfolgreicher Initilisierung leuchtet. Der 100k Widerstand liegt am analogen Eingang an und dient zur Messung der Versorgungsspannung. Als Motor wird ein 3V Getriebemotor verwendet.
 
 #### Schaltung mit 2S-Akku (Zwei Zellen)
 
 ![Schaltplan 2S Akku](/images/schaltplan2.png)
 
-Bei einem Zwei-Zellen Akku liegt die Versorgungsspannung im Bereich von 7,4 - 8,4 V. Zur Minderung der Spannung auf die erlaubten 5 V ein [Power-Shield](https://www.wemos.cc/en/latest/d1_mini_shield/dc_power.html) von *Lolin* verwendet. Im Prinzip ist das ein *Step-Down*-Regler. Das Motorshield wird aus dem Akku mit 7,2 V versorgt.
+Bei einem Zwei-Zellen Akku liegt die Versorgungsspannung im Bereich von 7,4 - 8,4 V. Zur Minderung der Spannung auf die erlaubten 5 V wird ein [Power-Shield](https://www.wemos.cc/en/latest/d1_mini_shield/dc_power.html) von *Lolin* verwendet. Im Prinzip ist das ein *Step-Down*-Regler. Das Motorshield wird aus dem Akku mit 7,2 V versorgt.
 
 Anstelle des *Lolin Power Shield* kann auch ein anderer *Step-Down*-Regler benutzt werden.
 
