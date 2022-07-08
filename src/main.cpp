@@ -69,6 +69,36 @@ void setupWifiAP() {
   Serial.println(WiFi.softAPIP());
 }
 
+void listAllFilesInDir(String dir_path)
+{
+	Dir dir = LittleFS.openDir(dir_path);
+	while(dir.next()) {
+		if (dir.isFile()) {
+			// print file names
+			Serial.print("File: ");
+			Serial.println(dir_path + dir.fileName());
+		}
+		if (dir.isDirectory()) {
+			// print directory names
+			Serial.print("Dir: ");
+			Serial.println(dir_path + dir.fileName() + "/");
+			// recursive file listing inside new directory
+			listAllFilesInDir(dir_path + dir.fileName() + "/");
+		}
+	}
+}
+
+/**
+ * Initialisiert das Filesystem (SPIFF) und loggt die Liste 
+ * aller Dateien.
+ */
+void setupLittleFS() {
+  if (LittleFS.begin()){
+    Serial.println("LittleFS init OK...");
+    listAllFilesInDir("/"); // Dateien ausgeben
+  } 
+}
+
 /**
  * @brief Lolin D1 Setup
  * 
@@ -88,9 +118,7 @@ void setup() {
   setupWifiAP();  // WLAN-Accesspoint starten
 
   // Filesystem (statische Webablage) initialisieren
-  if (LittleFS.begin()){
-    Serial.println("LittleFS init OK...");
-  }
+  setupLittleFS();
 
   server.onNotFound([]{
     if (!handleFileRead(server.uri()))                  // send it if it exists
@@ -117,6 +145,7 @@ void setup() {
   Serial.println("Timer started");
 
   // Init Motor-Shield
+  Serial.println("Starting Motor-Shield...");
   while (motor.PRODUCT_ID != PRODUCT_ID_I2C_MOTOR) {
     motor.getInfo();
   }
